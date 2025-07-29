@@ -1,0 +1,286 @@
+header {
+    width: 100%;
+    padding: 10px 0px 10px 30px;
+    border-bottom: 1px solid var(--Stroke, #ced4da);
+
+    background-color: #fff;
+}
+
+header img {
+    width: 100px;
+}
+
+main {
+    max-width: 1200px;
+
+    padding: 64px 0px 64px 0px;
+    margin: 30px auto 30px auto;
+    border-radius: 24px;
+    background-color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 48px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    text-align: center;
+}
+
+.container {
+    width: 900px;
+    margin: 32px auto 0px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.name-phone {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.location {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.location .input-container .styled-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.city {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    position: relative;
+
+    cursor: pointer;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+
+    z-index: 100;
+
+    background-color: #fff;
+}
+
+.item {
+    padding: 10px;
+
+    cursor: pointer;
+}
+
+.item:hover {
+    background-color: #bebdbd;
+}
+
+.ward {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    position: relative;
+    cursor: pointer;
+}
+
+.detail-location {
+    display: flex;
+    width: 100%;
+}
+
+.message-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-block label {
+    font-size: 14px;
+    color: #656565;
+    margin-bottom: 10px;
+}
+
+.message-block textarea {
+    font-family: "Inter";
+    font-size: 16px;
+    resize: vertical;
+
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 15px 10px;
+}
+
+.item-image img {
+    max-width: 130px;
+    height: 130px;
+    border-radius: 8px;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.description {
+    color: var(--Color-Neutral-Gray-700, #525252);
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.content {
+    margin: 30px 40px 0px 40px;
+}
+
+.item-order-block {
+    position: relative;
+}
+
+.item-order {
+    margin-top: 40px;
+    border-radius: 16px;
+    display: flex;
+
+    gap: 10px;
+}
+
+.item-order .basket-right {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    margin-right: 0;
+}
+
+.item-order .total-price-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.total-price-item .price {
+    margin: 0;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity .num-quantity {
+    padding: 8px 12px 8px 12px;
+    background-color: #ff6b00;
+    color: #fff;
+
+    border-radius: 25px;
+}
+
+.detail-fee {
+    width: 100%;
+    font-size: 16px;
+
+    margin-top: 30px;
+}
+
+.detail-fee .title-c {
+    color: #7c7c7c;
+}
+
+.total-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ship-fee {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.footer-your-order {
+    margin: 30px 00px 0px 00px;
+    padding: 30px 0px 30px 0px;
+    border-top: 2px solid var(--Color-Neutral-Gray-100, #efefef);
+}
+
+.total-bill-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.total-bill-price {
+    color: #ff6b00;
+}
+
+.list-button {
+    margin-top: 30px;
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.list-button button {
+    flex: 1;
+    width: 100%;
+    padding: 16px 0px;
+
+    border-radius: 4px;
+    border: none;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.list-button .cancel {
+    background: var(--Color-Neutral-Gray-100, #efefef);
+    color: #7c7c7c;
+}
+.list-button .cancel:hover {
+    background: var(--Color-Neutral-Gray-100, #bebebe);
+}
+
+.list-button .place-order {
+    background-color: #ff6b00;
+    color: #fff;
+}
+
+.list-button .place-order:hover {
+    background-color: #d45901;
+}

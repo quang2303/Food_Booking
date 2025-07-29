@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quang.app.JavaWeb_cdquang.mappers.OrderMapper">
+	<resultMap id="orderInfo" type="com.quang.app.JavaWeb_cdquang.entity.Order">
+		<id property="id" column="o_id" />
+		<result property="address" column="address" />
+		<result property="phone" column="phone" />
+		<result property="name" column="o_name" />
+		<result property="message" column="message" />
+		<result property="totalPrice" column="total_price" />
+		<result property="createAt" column="create_at" />
+		<result property="status" column="status" />
+		<result property="feeShip" column="fee_ship" />
+
+		<collection property="items"
+			ofType="com.quang.app.JavaWeb_cdquang.entity.Item">
+			<id property="id" column="i_id" />
+			<result property="name" column="i_name" />
+			<result property="description" column="description" />
+			<result property="price" column="price" />
+			<result property="image" column="image" />
+
+			<association property="orderItem"
+				javaType="com.quang.app.JavaWeb_cdquang.entity.OrderItems">
+				<id property="id" column="x_id" />
+				<result property="quantity" column="quantity" />
+			</association>
+		</collection>
+	</resultMap>
+
+	<resultMap id="orderThumnail"
+		type="com.quang.app.JavaWeb_cdquang.entity.Order">
+		<id property="id" column="o_id" />
+		<result property="totalPrice" column="total_price" />
+		<result property="createAt" column="create_at" />
+		<result property="status" column="status" />
+		<result property="itemCount" column="item_count" />
+
+		<association property="item"
+			javaType="com.quang.app.JavaWeb_cdquang.entity.Item">
+			<id property="id" column="i_id" />
+			<result property="name" column="i_name" />
+			<result property="description" column="description" />
+			<result property="price" column="price" />
+			<result property="image" column="image" />
+
+			<association property="orderItem"
+				javaType="com.quang.app.JavaWeb_cdquang.entity.OrderItems">
+				<id property="id" column="x_id" />
+				<result property="quantity" column="quantity" />
+			</association>
+		</association>
+	</resultMap>
+	<insert id="createOrder"
+		parameterType="com.quang.app.JavaWeb_cdquang.entity.Order"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		orders(address, name, phone, message, total_price, status, fee_ship)
+		VALUES
+		(#{address}, #{name}, #{phone}, #{message}, #{totalPrice}, "NEW",
+		#{feeShip})
+	</insert>
+
+	<select id="getOrderById" parameterType="int" resultMap="orderInfo">
+		SELECT
+			o.id AS o_id
+			, o. address
+			, o.phone
+			, o.name AS o_name
+			, o.message
+			, o.total_price
+			, o.create_at
+			, o.status
+			, o.fee_ship
+			, i.id AS i_id
+			, i.name AS i_name
+			, i.description
+			, i.price
+			, i.image
+			, x.id AS x_id
+			, x.quantity
+		FROM
+			orders o
+		LEFT JOIN order_items x ON o.id = x.order_id
+		LEFT JOIN items i ON i.id = x.item_id
+		WHERE
+			o.id = #{orderId}
+	</select>
+
+	<select id="findAllOrder" resultMap="orderThumnail"> WITH
+		first_item_each_order AS ( 
+			SELECT 
+				o.id AS o_id 
+				, o.total_price 
+				, o.create_at 
+				, o.status 
+				, i.id AS i_id 
+				, i.name AS i_name 
+				, i.description
+				, i.price 
+				, i.image 
+				, x.id AS x_id 
+				, x.quantity 
+				, ROW_NUMBER() OVER (PARTITION BY o.id ORDER BY x.id ASC) AS rn 
+				, SUM(x.quantity) OVER (PARTITION BY o.id) AS item_count 
+			FROM 
+				orders o 
+			JOIN ( SELECT DISTINCT o.id 
+					FROM 
+						orders o 
+					LEFT JOIN order_items x ON o.id = x.order_id LEFT
+					JOIN items i ON i.id = x.item_id 
+					<where> 
+						1 = 1 
+						<if
+							test="nameSearch != null and nameSearch != ''">
+							AND i.name LIKE CONCAT('%', #{nameSearch}, '%')
+						</if>
+						<choose>
+							<when test="listStatus != null and !listStatus.isEmpty()">
+								AND o.status IN 
+								<foreach item="s" collection="listStatus" open="(" separator="," close=")">
+									#{s}
+								</foreach>
+							</when>
+							<otherwise>
+								AND 1 = 0
+							</otherwise>
+						</choose>
+						<if test="listStatus == null and listStatus.isEmpty()"> 
+							AND o.status NOT IN ("CANCELED", "COMPLETED", "NEW", "SHIPPING")
+						</if>
+						<if
+							test="time != null and time == 'today'">
+							AND DATE(o.create_at) = CURRENT_DATE
+						</if>
+						<if
+							test="time != null and time == 'thisweek'">
+							AND YEARWEEK(o.create_at, 1) = YEARWEEK(CURRENT_DATE, 1)
+						</if>
+						<if
+							test="time != null and time == 'thismonth'">
+							AND YEAR(o.create_at) = YEAR(CURRENT_DATE)
+							AND MONTH(o.create_at) = MONTH(CURRENT_DATE)
+						</if>
+					</where>
+				) AS mo ON o.id = mo.id 
+			LEFT JOIN order_items x ON o.id = x.order_id
+			LEFT JOIN items i ON i.id = x.item_id ) 
+		SELECT * FROM first_item_each_order 
+		WHERE 
+			rn = 1 
+		ORDER BY create_at DESC
+		LIMIT #{limit} OFFSET #{offset} 
+	</select>
+
+	<select id="countFilteredOrders" resultType="int"> SELECT COUNT(1) FROM (
+		SELECT DISTINCT o.id FROM orders o LEFT JOIN order_items x ON o.id =
+		x.order_id LEFT JOIN items i ON i.id = x.item_id <where> 1 = 1 <if
+				test="nameSearch != null and nameSearch != ''">
+				AND i.name LIKE CONCAT('%', #{nameSearch}, '%')
+			</if>
+					<choose>
+							<when test="listStatus != null and !listStatus.isEmpty()">
+								AND o.status IN 
+								<foreach item="s" collection="listStatus" open="(" separator="," close=")">
+									#{s}
+								</foreach>
+							</when>
+							<otherwise>
+								AND 1 = 0
+							</otherwise>
+						</choose>
+					<if
+				test="time != null and time == 'today'">
+				AND DATE(o.create_at) = CURRENT_DATE
+			</if>
+					<if
+				test="time != null and time == 'thisweek'">
+				AND YEARWEEK(o.create_at, 1) = YEARWEEK(CURRENT_DATE, 1)
+			</if>
+					<if
+				test="time != null and time == 'thismonth'">
+				AND YEAR(o.create_at) = YEAR(CURRENT_DATE)
+				AND MONTH(o.create_at) = MONTH(CURRENT_DATE)
+			</if>
+		</where>
+		) AS oid </select>
+
+	<update id="updateStatus">
+		UPDATE orders
+		SET 
+			status = #{status}
+			, update_at = CURRENT_TIMESTAMP
+		WHERE id = #{id}
+	</update>
+
+	<select id="countOrderByStatus" parameterType="String" resultType="int">
+		SELECT COUNT(1) FROM orders WHERE status = #{status}
+	</select>
+
+	<select id="sumTodaySale" resultType="long">
+		SELECT IFNULL(SUM(total_price), 0) FROM orders WHERE status !=
+		"Canceled" AND DATE(create_at) = CURRENT_DATE
+	</select>
+
+	<select id="getOrderStats" parameterType="String" resultType="map">
+		<choose>
+
+			<when test="_parameter == 'day'">
+				SELECT DATE(create_at) AS label, IFNULL(SUM(total_price), 0) AS
+				total
+				FROM orders
+				WHERE create_at >= CURDATE() - INTERVAL 6 DAY
+				GROUP BY DATE(create_at)
+				ORDER BY DATE(create_at)
+			</when>
+
+			<when test="_parameter == 'week'">
+				SELECT YEARWEEK(create_at, 1) AS label, IFNULL(SUM(total_price),
+				0) AS total
+				FROM orders
+				WHERE YEARWEEK(create_at, 1) >= YEARWEEK(CURDATE(), 1) - 11
+				GROUP BY YEARWEEK(create_at, 1)
+				ORDER BY YEARWEEK(create_at, 1)
+			</when>
+
+			<when test="_parameter == 'month'">
+				SELECT YEAR(create_at) AS y, MONTH(create_at) AS m,
+				IFNULL(SUM(total_price), 0) AS total
+				FROM orders
+				WHERE create_at >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)
+				GROUP BY YEAR(create_at), MONTH(create_at)
+				ORDER BY YEAR(create_at), MONTH(create_at)
+			</when>
+
+			<otherwise>
+				SELECT 'Invalid' AS label, 0 AS total
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

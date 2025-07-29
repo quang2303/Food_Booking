@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Place order</title>
+<link rel="stylesheet" href="../css/base.css" />
+<link rel="stylesheet" href="../css/placeOrder.css" />
+</head>
+<body>
+	<div id="toast-container"></div>
+	<header>
+		<a href="/user/home.html"><img
+			src="../images/logo.png" alt="" /></a>
+	</header>
+
+	<main>
+		<p class="title">Delivery Infomation</p>
+		<div class="container">
+			<div class="name-phone">
+				<div class="input-container">
+					<label for="name" class="floating-label">Your
+						Full Name</label> 
+						<input type="text" id="name" class="styled-input" placeholder="Your full name"/>
+						<div class="note"></div>
+				</div>
+				<div class="input-container">
+					<label for="phone" class="floating-label">Your
+						Phone Number</label> 
+					<input type="text" id="phone" class="styled-input" placeholder="Your phone number"/>
+					<div class="note"></div>
+				</div>
+			</div>
+			<div class="location">
+				<div class="city">
+					<div class="input-container">
+						<p class="floating-label">City</p>
+						<div class="styled-input">
+							<p class="current-city">Choose City</p>
+							<img src="../images/icon/icon-dropdown.svg" alt="" />
+						</div>
+						<div class="note"></div>
+					</div>
+					<div class="dropdown-city dropdown styled-input">
+					</div>
+				</div>
+				<div class="ward">
+					<div class="input-container">
+						<p class="floating-label">Ward</p>
+						<div class="styled-input">
+							<p class="current-ward">Choose Ward</p>
+							<img src="../images/icon/icon-dropdown.svg" alt="" />
+						</div>
+						<div class="note"></div>
+					</div>
+					<div class="dropdown-ward dropdown styled-input">
+					</div>
+				</div>
+			</div>
+			<div class="detail-location">
+				<div class="input-container">
+					<label for="detail-location" class="floating-label">Street
+						Name, Building, House No.</label> <input type="text" id="detail-location"
+						class="styled-input" placeholder="Your address"/>
+						<div class="note"></div>
+				</div>
+			</div>
+			<img src="../images/map.png" alt="" />
+			<div class="message-block">
+				<label for="message">Message</label>
+				<textarea name="message" id="message" placeholder="Your message..."></textarea>
+				<div class="note"></div>
+			</div>
+
+			<div class="content">
+				<div class="item-order-block">
+					<div class="list-item-order"></div>
+					<div class="detail-fee">
+						<div class="total-price">
+							<p class="title-c">Total</p>
+							<p class="price-total">180.000 đ</p>
+						</div>
+						<div class="ship-fee">
+							<p class="title-c">Shipping fee</p>
+							<p class="price-fee">xx.000 đ</p>
+						</div>
+					</div>
+				</div>
+				<div class="footer-your-order">
+					<div class="total-bill-block">
+						<p>Total bill</p>
+						<p class="total-bill-price">xx.000 đ</p>
+					</div>
+					<div class="list-button">
+						<button class="cancel">Cancel</button>
+						<button class="place-order">Place Order</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script src="../js/jquery-3.7.1.min.js"></script>
+	<script src="../js/main.js"></script>
+	<script src="../js/placeOrder.js"></script>
+</body>
+</html>

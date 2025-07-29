@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.quang.app.JavaWeb_cdquang.mappers.ItemMapper">
+	<insert id="createItem" parameterType="com.quang.app.JavaWeb_cdquang.entity.Item">
+		INSERT INTO items (name, description, price, image, type)
+		VALUES (#{name}, #{description}, #{price}, #{image}, #{type})
+		
+	</insert>
+	
+	<update id="deleteItem">
+		UPDATE 
+			items
+		SET
+			status = false
+			, update_at = CURRENT_TIMESTAMP
+		WHERE
+			id = #{id}
+	</update>
+	
+	<update id="updateItem" parameterType="com.quang.app.JavaWeb_cdquang.entity.Item">
+		UPDATE 
+			items
+		SET
+			name = #{name}
+			, description = #{description}
+			, price = #{price}
+			, image = #{image}
+			, type = #{type}
+			, update_at = CURRENT_TIMESTAMP
+		WHERE
+			id = #{id}
+	</update>
+	
+	<select id="findItemByName">
+		SELECT 
+			EXISTS(
+				SELECT 
+					1 
+				FROM 
+					items 
+				WHERE
+					name=#{name}
+				)
+	</select>
+	
+	<select id="checkNameItemExisted">
+		SELECT 
+			EXISTS(
+				SELECT 
+					1 
+				FROM 
+					items 
+				WHERE
+					id!=#{id} AND name=#{name}
+				)
+	</select>
+	
+	<select id="getItemById">
+		SELECT 
+			*
+		FROM 
+			items
+		WHERE 
+			id = #{id}
+	</select>
+	
+	<select id="filterItems" resultType="com.quang.app.JavaWeb_cdquang.entity.Item">
+		SELECT * FROM items
+		<where>
+			1 = 1
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="type != null and type != ''">
+				AND type = #{type}
+			</if>
+		</where>
+		ORDER BY update_at DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="filterItemsUser" resultType="com.quang.app.JavaWeb_cdquang.entity.Item">
+		SELECT * FROM items
+		<where>
+			1 = 1
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="type != null and type != ''">
+				AND type = #{type}
+			</if>
+			
+			AND status = true
+		</where>
+		
+		<if test="sortByPrice != null and sortByPrice != ''">
+			ORDER BY price ${sortByPrice}
+		</if>
+		
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<select id="countFilteredItems" resultType="int">
+		SELECT COUNT(1) FROM items
+		<where>
+			1 = 1
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="type != null and type != ''">
+				AND type = #{type}
+			</if>
+		</where>
+	</select>
+	
+	<select id="countFilteredItemsUser" resultType="int">
+		SELECT COUNT(1) FROM items
+		<where>
+			1 = 1
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name}, '%')
+			</if>
+			<if test="type != null and type != ''">
+				AND type = #{type}
+			</if>
+			
+			AND status = true
+		</where>
+	</select>
+</mapper>

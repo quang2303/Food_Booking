@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/admin.css" />
+    </head>
+    <body>
+        <header>
+            <a href="/user/home.html"
+                ><img src="../images/logo.png" alt=""
+            /></a>
+            <div class="page-name">Dash board</div>
+            <div class="search-block">
+                <div class="search-group">
+                    <svg
+                        width="34px"
+                        height="34px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        ></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g clip-path="url(#clip0_15_152)">
+                                <rect width="24" height="24"></rect>
+                                <circle
+                                    cx="10.5"
+                                    cy="10.5"
+                                    r="6.5"
+                                    stroke="#000000"
+                                    stroke-linejoin="round"
+                                ></circle>
+                                <path
+                                    d="M19.6464 20.3536C19.8417 20.5488 20.1583 20.5488 20.3536 20.3536C20.5488 20.1583 20.5488 19.8417 20.3536 19.6464L19.6464 20.3536ZM20.3536 19.6464L15.3536 14.6464L14.6464 15.3536L19.6464 20.3536L20.3536 19.6464Z"
+                                    fill="#000000"
+                                ></path>
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_15_152">
+                                    <rect width="24" height="24"></rect>
+                                </clipPath>
+                            </defs>
+                        </g>
+                    </svg>
+
+                    <input id="search" type="text" placeholder="Search..." />
+                </div>
+            </div>
+        </header>
+        <div id="toast-container"></div>
+        <main>
+            <div class="sidebar">
+                <div>
+                    <a data-target="#dash-board" href="#">Dashboard</a>
+                    <a data-target="#management-item" href="#"
+                        >Management Item</a
+                    >
+                </div>
+                <div>
+                    <a data-target="#change-password" href="#"
+                        >Change password</a
+                    >
+                    <a class="logout" href="">Logout</a>
+                </div>
+            </div>
+            <div class="content">
+                <div class="content-section" id="dash-board">
+                    <div class="statistics">
+                        <div class="info-dashboard">
+                            <div class="today-sale">
+                                <div class="img-statistics">
+                                    <img
+                                        src="../images/icon/money.svg"
+                                        alt=""
+                                    />
+                                </div>
+                                <div class="content-statistics">
+                                    <p class="total-statistics">0 đ</p>
+                                    <p class="title">Today's Sale's</p>
+                                </div>
+                            </div>
+                            <div class="other-info">
+                                <div class="total-shipping">
+	                                <div class="total">
+	                                    <div class="img-statistics">
+	                                        <img
+	                                            src="../images/icon/chart.svg"
+	                                            alt=""
+	                                        />
+	                                    </div>
+	                                    <div class="content-statistics">
+	                                        <p class="total-statistics">0</p>
+	                                        <p class="title">Total</p>
+	                                    </div>
+	                                </div>
+	                                <div class="shipping">
+	                                    <div class="img-statistics">
+	                                        <img
+	                                            src="../images/icon/shipper.svg"
+	                                            alt=""
+	                                        />
+	                                    </div>
+	                                    <div class="content-statistics">
+	                                        <p class="total-statistics">0</p>
+	                                        <p class="title">Shipping</p>
+	                                    </div>
+	                                </div>
+                                
+                                </div>
+                                <div class="complete-cancel">
+	                                <div class="complete">
+	                                    <img
+	                                        src="../images/icon/order-success.svg"
+	                                        alt=""
+	                                    />
+	                                    <div class="content-statistics">
+	                                        <p class="total-statistics">0</p>
+	                                        <p class="title">Complete</p>
+	                                    </div>
+	                                </div>
+	                                <div class="cancel">
+	                                    <img
+	                                        src="../images/icon/cancel-pink.svg"
+	                                        alt=""
+	                                    />
+	                                    <div class="content-statistics">
+	                                        <p class="total-statistics">0</p>
+	                                        <p class="title">Cancel</p>
+	                                    </div>
+	                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart">
+                        	<div class="chart-filter-block">
+	                       		<div id="filter-time-chart" class="filter-type-item">
+		                            <button class="button-filter active day">
+		                                Day
+		                            </button>
+		                            <button class="button-filter week">
+		                                Week
+		                            </button>
+		                            <button class="button-filter month">
+		                                Month
+		                            </button>
+		                        </div>
+                        	</div>
+                        	<div  style="width: 100%;padding: 10px; max-height: 300px;" id="chart-dashboard">
+							</div>
+							<div class="detail-stats">
+								<p class="title">VALUE</p>
+								<p class="info">1 = 1.000.000đ</p>
+							</div>
+                        </div>
+                    </div>
+                    <div class="filter-block">
+                        <div class="filter-status-block">
+                            <div class="filter-status">
+                                <div class="filter-status-dropdown filter">
+                                    <p>Filter</p>
+                                    <img
+                                        src="../images/icon/icon-dropdown.svg"
+                                        alt=""
+                                    />
+                                </div>
+                                <div
+                                    class="list-filter list-filter-status"
+                                ></div>
+                            </div>
+                            <div class="list-status-choose">
+                                <div class="item-status">
+                                    <p>New</p>
+                                    <img
+                                        class="cancel-tag"
+                                        src="../images/icon/cancel.svg"
+                                        alt=""
+                                    />
+                                </div>
+                                <div class="item-status">
+                                    <p>Completed</p>
+                                    <img
+                                        class="cancel-tag"
+                                        src="../images/icon/cancel.svg"
+                                        alt=""
+                                    />
+                                </div>
+                                <div class="item-status">
+                                    <p>Canceled</p>
+                                    <img
+                                        class="cancel-tag"
+                                        src="../images/icon/cancel.svg"
+                                        alt=""
+                                    />
+                                </div>
+                                <div class="item-status">
+                                    <p>Shipping</p>
+                                    <img
+                                        class="cancel-tag"
+                                        src="../images/icon/cancel.svg"
+                                        alt=""
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-time">
+                            <div class="filter-time-dropdown filter">
+                                <p class="current-time">All</p>
+                                <img
+                                    src="../images/icon/icon-dropdown.svg"
+                                    alt=""
+                                />
+                            </div>
+                            <div class="list-filter list-filter-time">
+                                <p class="item">All</p>
+                                <p class="item">Today</p>
+                                <p class="item">This Week</p>
+                                <p class="item">This Month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-order-block">
+                        <div class="list-order">
+                        </div>
+                        <div class="pagination">
+                            <p class="total-items">Total 0 items</p>
+                            <div class="list-pagina">
+                                <a class="left">&lsaquo;</a>
+                                <div class="list-page"></div>
+                                <a class="right">&rsaquo;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-section" id="management-item">
+                    <div class="filter-item-block">
+                        <div id="filter-type" class="filter-type-item">
+                            <button class="button-filter active type-food">
+                                Food
+                            </button>
+                            <button class="button-filter type-drink">
+                                Drink
+                            </button>
+                        </div>
+                        <button class="button-add">
+                            <p>Create new item</p>
+                            <img src="../images/icon/add.svg" alt="" />
+                        </button>
+                    </div>
+                    <div class="table-block">
+                        <table border="1" class="item-table">
+                            <thead>
+                                <tr>
+                                    <th>NO.</th>
+                                    <th>Item Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="pagination">
+                            <p class="total-items">Total 200 items</p>
+                            <div class="list-pagina">
+                                <a class="left">&lsaquo;</a>
+                                <div class="list-page"></div>
+                                <a class="right">&rsaquo;</a>
+                            </div>
+                            <select name="num-per-page" id="num-per-page">
+                                <option value="10">10 / Page</option>
+                                <option value="20">20 / Page</option>
+                                <option value="30">30 / Page</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-section" id="change-password">
+                    <div class="change-password-container">
+			            <form id="change-password-form">
+			
+			                <div class="input-block">
+			                    <label for="password">Enter your Password</label>
+			                    <input
+			                        type="password"
+			                        id="password"
+			                        name="password"
+			                        placeholder="Your Password"
+			                    />
+			                    <div class="note"></div>
+			                </div>
+			                <div class="input-block">
+			                    <label for="new-password">Enter your new Password</label>
+			                    <input
+			                        type="password"
+			                        id="new-password"
+			                        name="new-password"
+			                        placeholder="Your new Password"
+			                    />
+			                    <div class="note"></div>
+			                </div>
+			                <button type="submit">Confirm</button>
+			            </form>
+			        </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="modal" id="modal-detail-order">
+            <div class="model-block">
+                <div class="head-modal">
+                    <span class="close"
+                        ><img src="../images/icon/cancel.svg" alt=""
+                    /></span>
+                    <div class="num-date-quantity">
+                        <p class="num"></p>
+                        <p class="date"></p>
+                        <p class="quantity"></p>
+                    </div>
+                </div>
+
+                <div class="modal-content">
+                    <div class="address-block">
+                        <div class="title-address">
+                            <img src="../images/icon/address.svg" alt="" />
+                            <p class="title">Delivery Address</p>
+                        </div>
+                        <div class="address-info">
+                            <p class="name"></p>
+                            <p class="phone"></p>
+                            <p class="address">
+                            </p>
+                            <p class="message">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="list-order-detail">
+                    </div>
+                    <div class="total-fee">
+                        <div class="total-price-item total-fee-child">
+                            <p class="title">Total</p>
+                            <p class="price">0</p>
+                        </div>
+                        <div class="fee-shipping total-fee-child">
+                            <p class="title">Shipping fee</p>
+                            <p class="price">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-detail-order">
+                    <div class="total-price-order">
+                        <p class="title">Total bill</p>
+                        <p class="price">0 đ</p>
+                    </div>
+                    <div class="status-dropdown-order-block">
+                        <div class="order-dropdown">
+                            <div class="status-dropdown-order">
+                            </div>
+                            <div class="list-status-order">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal-add-item">
+            <div class="model-block">
+                <div class="head-modal">
+                    <p class="title-header-modal">Create New Item</p>
+                </div>
+
+                <div class="modal-content">
+                    <div class="image-type">
+                        <div class="image-block">
+                            <div class="image-show">
+                                <img src="../images/img-ab.png" alt="" />
+                            </div>
+                            <div class="info-button">
+                                <div class="note"></div>
+                                <p class="info">
+                                    Please upload square image size less than
+                                    5MB
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="choose-file"
+                                    class="choose-file"
+                                />
+                                <label for="choose-file">Choose File</label>
+                            </div>
+                        </div>
+                        <div class="filter-type-item">
+                            <button class="button-filter active type-food">
+                                Food
+                            </button>
+                            <button class="button-filter type-drink">
+                                Drink
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="info-add-item">
+                        <div class="input-container">
+                            <label for="name" class="floating-label"
+                                >Item Name</label
+                            >
+                            <input type="text" id="name" class="styled-input" />
+                            <div class="note"></div>
+                        </div>
+                        <div class="input-container">
+                            <label for="description" class="floating-label"
+                                >Description</label
+                            >
+                            <input
+                                type="text"
+                                id="description"
+                                class="styled-input"
+                            />
+                            <div class="note"></div>
+                        </div>
+                        <div class="input-container">
+                            <label for="price" class="floating-label"
+                                >Price (vnđ)</label
+                            >
+                            <input
+                                type="number"
+                                id="price"
+                                class="styled-input"
+                            />
+                            <div class="note"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-detail-order">
+                    <div class="list-button">
+                        <button id="cancel-add" class="cancel-add cancel-modal">
+                            Cancel
+                        </button>
+                        <button id="add-item" class="add-item">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal-edit-item">
+            <div class="model-block">
+                <div class="head-modal">
+                    <p class="title-header-modal">Edit Item</p>
+                </div>
+
+                <div class="modal-content">
+                    <div class="image-type">
+                        <div class="image-block">
+                            <div class="image-show">
+                                <img src="../images/img-ab.png" alt="" />
+                            </div>
+                            <div class="info-button">
+                                <div class="note"></div>
+                                <p class="info">
+                                    Please upload square image size less than
+                                    5MB
+                                </p>
+
+                                <input
+                                    type="file"
+                                    id="choose-file-edit"
+                                    class="choose-file"
+                                />
+                                <label for="choose-file-edit"
+                                    >Choose File</label
+                                >
+                            </div>
+                        </div>
+                        <div class="filter-type-item">
+                            <button class="button-filter active type-food">
+                                Food
+                            </button>
+                            <button class="button-filter type-drink">
+                                Drink
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="info-add-item">
+                        <div class="input-container">
+                            <label for="name" class="floating-label"
+                                >Item Name</label
+                            >
+                            <input type="text" id="name" class="styled-input" />
+                            <div class="note"></div>
+                        </div>
+                        <div class="input-container">
+                            <label for="description" class="floating-label"
+                                >Description</label
+                            >
+                            <input
+                                type="text"
+                                id="description"
+                                class="styled-input"
+                            />
+                            <div class="note"></div>
+                        </div>
+                        <div class="input-container">
+                            <label for="price" class="floating-label"
+                                >Price (vnđ)</label
+                            >
+                            <input
+                                type="number"
+                                id="price"
+                                class="styled-input"
+                            />
+                            <div class="note"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-detail-order">
+                    <div class="list-button">
+                        <button
+                            id="cancel-edit"
+                            class="cancel-add cancel-modal"
+                        >
+                            Cancel
+                        </button>
+                        <button id="confirm-edit" class="add-item">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="dialog-confirm-delete">
+            <div class="model-block">
+                <div class="modal-content">
+                    <h2>Are you sure?</h2>
+                    <p>Are you sure you want to delete this item?</p>
+                </div>
+
+                <div class="footer-detail-order">
+                    <div class="list-button">
+                        <button
+                            id="cancel-delete"
+                            class="cancel-add cancel-modal"
+                        >
+                            No
+                        </button>
+                        <button id="confirm-delete" class="add-item">
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="dialog-confirm-update">
+            <div class="model-block">
+                <div class="modal-content">
+                    <h2>Update status order</h2>
+                    <p>Are you sure you want to update status this order?</p>
+                </div>
+
+                <div class="footer-detail-order">
+                    <div class="list-button">
+                        <button
+                            id="cancel-update"
+                            class="cancel-add cancel-modal"
+                        >
+                            No
+                        </button>
+                        <button id="confirm-update" class="add-item">
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+        <script type="text/javascript" src="../js/admin.js"></script>
+    </body>
+</html>

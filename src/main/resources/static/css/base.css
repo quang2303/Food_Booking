@@ -1,0 +1,177 @@
+@font-face {
+    font-family: "Poppins";
+    src: url("../font/Poppins-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../font/Inter-VariableFont_opsz\,wght.ttf") format("truetype");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    font-style: Regular;
+    font-size: 16px;
+
+    background-color: #fafbfcff;
+}
+
+#toast-container {
+    position: fixed;
+    top: 70px;
+    right: 18%;
+    z-index: 9999;
+}
+
+.toast {
+    min-width: 300px;
+    margin-top: 10px;
+
+    color: white;
+    font-size: 14px;
+    animation: fadeIn 0.5s, fadeOut 0.5s 2.5s forwards;
+    box-shadow: 0px 8px 16px 0px #00000026;
+    border: 1px solid #0000001a;
+
+    border-radius: 5px;
+}
+
+.close-toast {
+    cursor: pointer;
+    width: 20px;
+}
+
+.title-toast {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 8px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.content-toast {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 10px;
+}
+
+.name-toast {
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+
+    color: var(--Color-Neutral-Gray-800, #464646);
+}
+
+.title-toast.success {
+    background-color: #dcf2e0ff;
+}
+
+.content-toast.success {
+    background-color: rgb(23, 173, 48);
+}
+
+.title-toast.error {
+    background-color: #fadce3ff;
+}
+
+.content-toast.error {
+    background-color: rgb(227, 25, 69);
+}
+
+.title-toast.other {
+    background-color: rgb(255, 245, 217);
+}
+
+.content-toast.other {
+    background-color: rgb(255, 193, 8);
+}
+
+.pagination {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.list-pagina {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    
+    cursor: pointer;
+}
+
+.pagination a.active {
+    background-color: #ff6b00;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #e0e0e0;
+}
+
+#num-per-page {
+    padding: 8px 12px;
+    border: 1px solid var(--Stroke, #ced4da);
+    border-radius: 4px;
+}
+
+.input-container {
+    position: relative;
+    display: inline-block;
+    flex: 1;
+
+    min-height: 70px;
+}
+
+.styled-input {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 15px 10px;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+}
+
+.floating-label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: white;
+    padding: 0 5px;
+    font-size: 14px;
+    color: #656565;
+    pointer-events: none;
+}
+
+.note {
+    color: red;
+    font-size: 14px;
+}

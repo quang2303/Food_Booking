@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Order successfully</title>
+        <link rel="stylesheet" href="../css/base.css" />
+        <link rel="stylesheet" href="../css/orderSuccessfully.css" />
+    </head>
+    <body>
+    	<div id="toast-container"></div>
+        <header>
+            <a href="/user/home.html"
+                ><img src="../images/logo.png" alt=""
+            /></a>
+        </header>
+        <main>
+            <div class="title-block">
+                <div class="title">
+                    <img src="../images/icon/order-success.svg" alt="" />
+                    <p>Order successfully</p>
+                </div>
+                <p class="content">
+                    Thank you for your patience. We're finalizing your order for
+                    a seamless delivery experience.
+                </p>
+            </div>
+            <div class="shipper-container">
+                <img class="shipper" src="../images/shipper-gif.gif" alt="" />
+            </div>
+            <a class="back-home" href="/user/home.html">Back To Home Page</a>
+        </main>
+        
+        <script type="text/javascript" src="../js/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+        <script>
+        	showToast("success", "Place order successfully", "Order placed successfully! We're preparing your food")
+        </script>
+    </body>
+    
+</html>
