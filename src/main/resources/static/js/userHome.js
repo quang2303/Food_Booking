@@ -35,7 +35,6 @@ function addToBasket(itemAdd, numItem) {
 	basket.push(item);
 	totalItem += numItem;
 	totalPrice += numItem * itemAdd.price
-	console.log(totalItem);
 
 	sessionStorage.setItem('basket', JSON.stringify(basket));
 	sessionStorage.setItem('totalItem', totalItem.toString())
@@ -56,7 +55,6 @@ function deleteFromBasket(itemId) {
 	totalPrice -= item.num * item.item.price;
 	basket = basket.filter(thisItem => thisItem.item.id != itemId);
 
-	console.log(totalItem);
 	sessionStorage.setItem('basket', JSON.stringify(basket));
 	sessionStorage.setItem('totalItem', totalItem.toString())
 	sessionStorage.setItem('totalPrice', totalPrice.toString())
@@ -73,7 +71,6 @@ function updateItemBasket(itemId, numItem) {
 
 	let isChange = false;
 	basket.forEach(function(item) {
-		console.log(item.item.id);
 		if (item.item.id == itemId) {
 			if (item.num == numItem) {
 				return true;
@@ -98,7 +95,7 @@ function updateItemBasket(itemId, numItem) {
 }
 
 function getNumItemBasket(itemId) {
-	let basket = JSON.parse(sessionStorage.getItem('basket'));
+	let basket = JSON.parse(sessionStorage.getItem('basket')) || [];
 
 	let item = basket.filter(item => item.item.id == itemId);
 
@@ -117,7 +114,7 @@ function checkBasket() {
 
 		const html = `
             <p class="total-price-basket active-basket">
-                            ${totalPrice} đ
+                            ${formater.format(totalPrice)} đ
                         </p>
                         <div class="total-item-basket active-basket">
                             <p class="num-item-basket">${totalItem}</p>
@@ -179,6 +176,7 @@ $(".list-item").on("click", ".minus", function() {
 	let currentP = parseInt($(this).next().val());
 
 	if (currentP == 1) {
+		showToast("error", "Add item to basket", "Min quantity of this item is 1")
 		return;
 	}
 
@@ -194,6 +192,7 @@ $(".list-item").on("click", ".plus", function() {
 	let currentP = parseInt($(this).prev().val());
 
 	if (currentP == 3) {
+		showToast("error", "Add item to basket", "Max quantity of this item is 3")
 		return;
 	}
 
@@ -276,7 +275,7 @@ function renderItemsPerPage(data) {
 		                            <p class="description">
 		                                ${item.description}
 		                            </p>
-		                            <p class="price">${item.price} đ</p>
+		                            <p class="price">${formater.format(item.price)} đ</p>
 		                        </div>
 		                    </div>
 		                    <div class="list-button">
@@ -397,6 +396,7 @@ function renderAllItems() {
 
 $("#num-per-page").change(function() {
 	size = parseInt($(this).val());
+	currentPage = 1;
 	renderAllItems();
 });
 
@@ -407,6 +407,7 @@ $("#filter-price").change(function() {
 
 $("#search").on("keypress", function(e) {
 	if (e.which == 13) {
+		$(".search-box").hide();
 		renderAllItems();
 	}
 });
@@ -416,33 +417,31 @@ $("#modal-add-item").on("click", ".minus", function() {
 	let currentP = parseInt($(this).next().val());
 
 	if (currentP == 1) {
+		showToast("error", "Add item to basket", "Min quantity of this item is 1")
 		return;
 	}
 
-	console.log(currentP)
 	currentP -= 1;
 
-	console.log(currentP)
 	$(this).next().val(currentP);
 
-	let price = parseInt($("#modal-add-item .price").text());
-	$("#modal-add-item #add-to-basket").text("Add to Basket - " + price * currentP + " đ");
+	let price = parseInt($("#modal-add-item .price").text().replace(".", ""));
+	$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(price * currentP) + " đ");
 });
 
 $("#modal-add-item").on("click", ".plus", function() {
 	let currentP = parseInt($(this).prev().val());
 
 	if (currentP == 3) {
+		showToast("error", "Add item to basket", "Max quantity of this item is 3")
 		return;
 	}
 
-	console.log(currentP)
 	currentP += 1;
-	console.log(currentP)
 	$(this).prev().val(currentP);
 
-	let price = parseInt($("#modal-add-item .price").text());
-	$("#modal-add-item #add-to-basket").text("Add to Basket - " + price * currentP + " đ");
+	let price = parseInt($("#modal-add-item .price").text().replace(".", ""));
+	$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(price * currentP) + " đ");
 });
 
 $("#modal-add-item").on("blur", ".num-item", function(event) {
@@ -450,16 +449,16 @@ $("#modal-add-item").on("blur", ".num-item", function(event) {
 
 	if (value == "" || value < 1) {
 		$(this).val("1");
-		let price = parseInt($("#modal-add-item .price").text());
-		$("#modal-add-item #add-to-basket").text("Add to Basket - " + price + " đ");
+		let price = parseInt($("#modal-add-item .price").text().replace(".", ""));
+		$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(price) + " đ");
 	} else if (value > 3) {
 		$(this).val("3");
 
-		let price = parseInt($("#modal-add-item .price").text());
-		$("#modal-add-item #add-to-basket").text("Add to Basket - " + price * 3 + " đ");
+		let price = parseInt($("#modal-add-item .price").text().replace(".", ""));
+		$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(price * 3) + " đ");
 	} else if (value == "1" || value == "2" || value == "3") {
-		let price = parseInt($("#modal-add-item .price").text());
-		$("#modal-add-item #add-to-basket").text("Add to Basket - " + price * parseInt(value) + " đ");
+		let price = parseInt($("#modal-add-item .price").text().replace(".", ""));
+		$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(price * parseInt(value)) + " đ");
 	}
 });
 
@@ -474,18 +473,17 @@ $(".list-item").on("click", ".item-info", function() {
 	);
 	$("#modal-add-item .name").text(thisItem.name);
 	$("#modal-add-item .description").text(thisItem.description);
-	$("#modal-add-item .price").text(thisItem.price + " đ");
+	$("#modal-add-item .price").text(formater.format(thisItem.price) + " đ");
 	$("#modal-add-item .footer-add-item").attr("id", thisId);
 
 	let numItem = getNumItemBasket(thisId);
-	console.log(numItem)
 
 	if (numItem == 0) {
 		$("#modal-add-item .num-item").val("1");
-		$("#modal-add-item #add-to-basket").text("Add to Basket - " + thisItem.price + " đ");
+		$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(thisItem.price) + " đ");
 	} else {
 		$("#modal-add-item .num-item").val(numItem);
-		$("#modal-add-item #add-to-basket").text("Add to Basket - " + thisItem.price * numItem + " đ");
+		$("#modal-add-item #add-to-basket").text("Add to Basket - " + formater.format(thisItem.price * numItem) + " đ");
 	}
 });
 
@@ -533,13 +531,13 @@ function renderBasket() {
 											<p class="description">${item.description}</p>
 										</div>
 										<div class="total-price-item">
-											<p class="price">${item.price} đ</p>
+											<p class="price">${formater.format(item.price)} đ</p>
 											<div class="add-num-block">
 												<img class="minus" src="../images/icon/minus.svg" alt="" />
 												<input class="num-item" type="number" min="1" max="3" value=${thisItem.num} />
 												<img class="plus" src="../images/icon/plus.svg" alt="" />
 											</div>
-											<p class="total-item">${thisItem.num * item.price} đ</p>
+											<p class="total-item">${formater.format(thisItem.num * item.price)} đ</p>
 										</div>
 									</div>
 									<div class="delete-item-basket">
@@ -581,21 +579,20 @@ $("#modal-show-basket").on("click", ".minus", function() {
 	let currentP = parseInt($(this).next().val());
 
 	if (currentP == 1) {
+		showToast("error", "Add item to basket", "Min quantity of this item is 1")
 		return;
 	}
 
-	console.log(currentP)
 	currentP -= 1;
 
-	console.log(currentP)
 	$(this).next().val(currentP);
 
 	let id = $(this).parent().parent().parent().parent().attr("id")
 	updateItemBasket(id, currentP);
 
-	let price = $(`#${id} .price`).text();
+	let price = $(`#${id} .price`).text().replace(".", "");
 	price = parseInt(price.substr(0, price.length - 2))
-	$(this).parent().next().text(price * currentP + " đ");
+	$(this).parent().next().text(formater.format(price * currentP) + " đ");
 	$("#modal-show-basket .price-total").text(sessionStorage.getItem('totalPrice') + " đ")
 
 	checkItemIsAdd();
@@ -605,6 +602,7 @@ $("#modal-show-basket").on("click", ".plus", function() {
 	let currentP = parseInt($(this).prev().val());
 
 	if (currentP == 3) {
+		showToast("error", "Add item to basket", "Max quantity of this item is 3")
 		return;
 	}
 
@@ -615,10 +613,9 @@ $("#modal-show-basket").on("click", ".plus", function() {
 	let id = $(this).parent().parent().parent().parent().attr("id")
 	updateItemBasket(id, currentP);
 
-	let price = $(`#${id} .price`).text();
+	let price = $(`#${id} .price`).text().replace(".", "");
 	price = parseInt(price.substr(0, price.length - 2))
-	console.log(price * currentP);
-	$(this).parent().next().text(price * currentP + " đ");
+	$(this).parent().next().text(formater.format(price * currentP) + " đ");
 	$("#modal-show-basket .price-total").text(sessionStorage.getItem('totalPrice') + " đ")
 
 	checkItemIsAdd();
@@ -646,10 +643,10 @@ $("#modal-show-basket").on("blur", ".num-item", function(event) {
 	}
 
 
-	let price = parseInt($(`#modal-show-basket #${id} .price`).text());
+	let price = parseInt($(`#modal-show-basket #${id} .price`).text().replace(".", ""));
 	let val = parseInt($(this).val());
 
-	$(`#modal-show-basket #${id} .total-item`).text(price * val);
+	$(`#modal-show-basket #${id} .total-item`).text(formater.format(price * val));
 
 	checkItemIsAdd();
 });
@@ -761,7 +758,6 @@ function renderStatusOrder(status) {
 							`)
 		}
 		if (isStatus) {
-			console.log(i)
 			$(`.stepper-wrapper .step-${i + 2}`).append(`
 							<div class="step-counter">
 								<img src="../images/icon/status-feature.svg" alt="" />
@@ -784,11 +780,11 @@ function renderItemOrder() {
 						<div class="detail-fee">
 							<div class="total-price">
 								<p class="title">Total</p>
-								<p class="price-total">${currentOrder.totalPrice - currentOrder.feeShip} đ</p>
+								<p class="price-total">${formater.format(currentOrder.totalPrice - currentOrder.feeShip)} đ</p>
 							</div>
 							<div class="ship-fee">
 								<p class="title">Shipping fee</p>
-								<p class="price-fee">${currentOrder.feeShip} đ</p>
+								<p class="price-fee">${formater.format(currentOrder.feeShip)} đ</p>
 							</div>
 						</div>
 		`);
@@ -797,7 +793,7 @@ function renderItemOrder() {
 		$("#modal-your-order .item-order-block").append('<div class="see-more"><img src="../images/icon/more.svg" alt="" /></div>');
 	}
 
-	$("#modal-your-order .total-bill-price").text(currentOrder.totalPrice + " đ");
+	$("#modal-your-order .total-bill-price").text(formater.format(currentOrder.totalPrice) + " đ");
 
 	const firstItem = currentOrder.items[0];
 
@@ -814,7 +810,7 @@ function renderItemOrder() {
 											<p class="description">${firstItem.description}</p>
 										</div>
 										<div class="total-price-item">
-											<p class="price">${firstItem.price} đ</p>
+											<p class="price">${formater.format(firstItem.price)} đ</p>
 
 											<div class="quantity">
 												<p class="title">Quantity:</p>
@@ -902,7 +898,7 @@ $("#modal-your-order").on("click", ".see-more", function() {
 																<p class="description">${item.description}</p>
 															</div>
 															<div class="total-price-item">
-																<p class="price">${item.price} đ</p>
+																<p class="price">${formater.format(item.price)} đ</p>
 
 																<div class="quantity">
 																	<p class="title">Quantity:</p>
@@ -934,7 +930,7 @@ $("#modal-your-order").on("click", ".see-more", function() {
 													<p class="description">${firstItem.description}</p>
 												</div>
 												<div class="total-price-item">
-													<p class="price">${firstItem.price} đ</p>
+													<p class="price">${formater.format(firstItem.price)} đ</p>
 
 													<div class="quantity">
 														<p class="title">Quantity:</p>
@@ -964,10 +960,116 @@ function firstLoad() {
 	}, 2000);
 }
 
+$("#search").on("input", function() {
+	const keyword = $(this).val().trim();
+	const $searchBox = $(".search-box");
+	const $suggestBox = $("#suggest-box");
+	
+	$searchBox.show();
+
+	if (keyword.length === 0) {
+		$suggestBox.empty();
+		return;
+	}
+
+	$.ajax({
+		url: "http://localhost:8080/api/user/items/suggest",
+		method: "GET",
+		data: { name: keyword },
+		success: function(res) {
+			if (res.data && res.data.length > 0) {
+				const html = res.data.map(item => `<div class="suggest-item">${item}</div>`).join("");
+				$suggestBox.html(html);
+
+				$(".suggest-item").on("click", function() {
+					$("#search").val($(this).text());
+					$suggestBox.empty();
+					$searchBox.hide();
+					renderAllItems();
+				});
+			} else {
+				$suggestBox.empty();
+			}
+		},
+		error: function() {
+			console.error("Can not get suggest");
+		}
+	});
+});
+
+$("#search").on("focus", function() {
+
+	const $searchBox = $(".search-box");
+	const $suggestBox = $("#suggest-box");
+	$searchBox.show();
+
+	const $topSearchBox = $(".list-top-search");
+
+	$.ajax({
+		url: "http://localhost:8080/api/search/top_search",
+		method: "GET",
+		success: function(res) {
+			if (res.data && res.data.length > 0) {
+				$topSearchBox.empty();
+				const html = res.data.map(item => `<div class="top-search-item">${item}</div>`).join("");
+				$topSearchBox.html(html);
+
+				$(".top-search-item").on("click", function() {
+					$("#search").val($(this).text());
+					$suggestBox.empty();
+					$searchBox.hide();
+					renderAllItems();
+				});
+			} else {
+				$topSearchBox.empty();
+			}
+		},
+		error: function() {
+			console.error("Can not get top search");
+		}
+	});
+})
+
+$(document).on("click", function(e) {
+	if (!$(e.target).closest(".search-block-cover").length) {
+		$(".search-box").hide();
+	}
+});
+
+function renderTopSold() {
+	const $block = $(".list-top-sold");
+
+	$.ajax({
+		url: "http://localhost:8080/api/search/top_sold",
+		method: "GET",
+		success: function(res) {
+			$block.empty();
+			const html = res.data.map(item => `				
+					<div class="item">
+				            <div class="item-info">
+				                <div class="item-image">
+				                    <img src="/uploads/${item.image}" alt="" />
+				                </div>
+				                <div class="info">
+				                    <p class="name">${item.name}</p>
+				                    <p class="price">${formater.format(item.price)} đ</p>
+									<p class="total-sold">Đã bán: ${item.totalSold}</p>
+				                </div>
+				            </div>
+				        </div>`).join("");
+			$block.html(html);
+		},
+		error: function() {
+			handleShowToastError(xhr, "Load item top sold")
+		}
+	});
+}
+
 $(document).ready(function() {
-	firstLoad()
+	firstLoad();
 	renderAllItems();
 	checkBasket();
+	renderTopSold()
 });
 
 $(window).scroll(function() {
@@ -992,11 +1094,3 @@ $(window).scroll(function() {
 		$(".block-filter").removeClass('fixed');
 	}
 });
-
-// $(".list-item").on("keydown", ".num-item", function (event) {
-//     console.log(event.key);
-
-//     if (!(event.key >= 1 && event.key <= 3) || $(this).val().length == 1) {
-//         event.preventDefault();
-//     }
-// });

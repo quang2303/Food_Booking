@@ -86,6 +86,30 @@
 		WHERE
 			o.id = #{orderId}
 	</select>
+	
+	<select id="getAllOrder" resultMap="orderInfo">
+		SELECT
+			o.id AS o_id
+			, o. address
+			, o.phone
+			, o.name AS o_name
+			, o.message
+			, o.total_price
+			, o.create_at
+			, o.status
+			, o.fee_ship
+			, i.id AS i_id
+			, i.name AS i_name
+			, i.description
+			, i.price
+			, i.image
+			, x.id AS x_id
+			, x.quantity
+		FROM
+			orders o
+		LEFT JOIN order_items x ON o.id = x.order_id
+		LEFT JOIN items i ON i.id = x.item_id
+	</select>
 
 	<select id="findAllOrder" resultMap="orderThumnail"> WITH
 		first_item_each_order AS ( 
@@ -196,12 +220,11 @@
 	</update>
 
 	<select id="countOrderByStatus" parameterType="String" resultType="int">
-		SELECT COUNT(1) FROM orders WHERE status = #{status}
+		SELECT COUNT(1) FROM orders WHERE status = #{status} AND DATE(create_at) = CURRENT_DATE
 	</select>
 
 	<select id="sumTodaySale" resultType="long">
-		SELECT IFNULL(SUM(total_price), 0) FROM orders WHERE status !=
-		"Canceled" AND DATE(create_at) = CURRENT_DATE
+		SELECT IFNULL(SUM(total_price), 0) FROM orders WHERE DATE(create_at) = CURRENT_DATE
 	</select>
 
 	<select id="getOrderStats" parameterType="String" resultType="map">

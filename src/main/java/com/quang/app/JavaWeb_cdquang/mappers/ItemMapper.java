@@ -29,4 +29,6 @@ public interface ItemMapper {
 	public void deleteItem(@Param("id") int id);
 	
 	public void updateItem(Item item);
+	
+	public List<Item> getAllItem();
 }

@@ -1,3 +1,5 @@
+const formater = new Intl.NumberFormat("vi-VN");
+
 function handleShowToastError(xhr, title) {
 	const response = xhr.responseJSON;
 	const status = xhr.status;

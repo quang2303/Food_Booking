@@ -1,0 +1,63 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "ngram_filter": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 20
+        }
+      },
+      "analyzer": {
+        "vn_prefix_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "ngram_filter"
+          ]
+        },
+        "vn_search_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "text" },
+      "phone": { "type": "keyword" },
+      "address": { "type": "text" },
+      "message": { "type": "text" },
+      "totalPrice": { "type": "long" },
+      "feeShip": { "type": "long" },
+      "status": { "type": "keyword" },
+      "createAt": {
+        "type": "date",
+        "format": "yyyy-MM-dd||strict_date_optional_time||epoch_millis"
+      },
+      "items": {
+        "type": "nested",
+        "properties": {
+          "id": { "type": "text" },
+          "name": {
+            "type": "text",
+            "analyzer": "vn_prefix_analyzer",
+            "search_analyzer": "vn_search_analyzer"
+          },
+          "description": { "type": "text" },
+          "image": { "type": "keyword" },
+          "price": { "type": "long" },
+          "quantity": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

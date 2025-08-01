@@ -161,8 +161,8 @@ $(".dropdown-ward").on("click", ".item", function() {
 	wardCity.forEach(function(ward) {
 		console.log(ward);
 		if (ward.nameWard == val) {
-			$(".price-fee").text(ward.feeShip + " đ");
-			$(".total-bill-price").text((ward.feeShip + totalPrice) + " đ");
+			$(".price-fee").text(formater.format(ward.feeShip) + " đ");
+			$(".total-bill-price").text(formater.format((ward.feeShip + totalPrice)) + " đ");
 		}
 	})
 });
@@ -214,7 +214,7 @@ function renderItemOrder() {
 		                                        </p>
 		                                    </div>
 		                                    <div class="total-price-item">
-		                                        <p class="price">${item.price} đ</p>
+		                                        <p class="price">${formater.format(item.price)} đ</p>
 
 		                                        <div class="quantity">
 		                                            <p class="title-quantity">
@@ -230,7 +230,7 @@ function renderItemOrder() {
 		$(".list-item-order").append(html);
 	});
 	let totalPrice = parseInt(sessionStorage.getItem('totalPrice'));
-	$(".price-total").text(totalPrice + " đ")
+	$(".price-total").text(formater.format(totalPrice) + " đ")
 }
 
 $(".cancel").click(function() {
@@ -331,9 +331,9 @@ $(".place-order").click(function() {
 	const city = $(".current-city").text().trim();
 	const ward = $(".current-ward").text().trim();
 	const detailLocation = $("#detail-location").val().trim();
-	let priceText = $(".total-bill-price").text()
+	let priceText = $(".total-bill-price").text().replace(".", "");
 	const totalPrice = parseInt(priceText.substr(0, priceText.length - 2));
-	let feeText = $(".price-fee").text()
+	let feeText = $(".price-fee").text().replace(".", "");
 	const feeShip = parseInt(feeText.substr(0, feeText.length - 2));
 
 	if (!validateInfo(name, phone, message, city, ward, detailLocation)) {

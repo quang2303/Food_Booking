@@ -34,6 +34,9 @@ public class OrderService {
 
 	@Autowired
 	OrderItemsMapper orderItemsMapper;
+	
+	@Autowired
+	ElasticOrderService elasticOrderService;
 
 	@Transactional
 	public Integer createOrder(OrderRequest orderInfo) {
@@ -51,6 +54,8 @@ public class OrderService {
 		} catch (Exception e) {
 			throw new OperationFailedException("Create items order is failed");
 		}
+		
+		elasticOrderService.saveOrderToElastic(order.getId());
 
 		return order.getId();
 	}
@@ -107,6 +112,7 @@ public class OrderService {
 
 		try {
 			orderMapper.updateStatus(orderRequest.getOrderId(), newStatus);
+			elasticOrderService.saveOrderToElastic(orderRequest.getOrderId());
 		} catch (Exception e) {
 			throw new OperationFailedException("Update status order is failed");
 		}

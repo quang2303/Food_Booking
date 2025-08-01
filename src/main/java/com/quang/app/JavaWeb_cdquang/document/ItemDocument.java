@@ -1,15 +1,14 @@
-package com.quang.app.JavaWeb_cdquang.entity;
+package com.quang.app.JavaWeb_cdquang.document;
 
-import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+@NoArgsConstructor
+public class ItemDocument {
 	private Integer id;
 	private String name;
 	private String description;
@@ -17,8 +16,6 @@ public class Item {
 	private String image;
 	private Boolean status;
 	private String type;
-	private LocalDateTime createAt;
-	private LocalDateTime updateAt;
-	
-	private OrderItems orderItem;
+	private String createAt;
+	private String updateAt;
 }

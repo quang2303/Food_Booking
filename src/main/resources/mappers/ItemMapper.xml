@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.quang.app.JavaWeb_cdquang.mappers.ItemMapper">
-	<insert id="createItem" parameterType="com.quang.app.JavaWeb_cdquang.entity.Item">
+	<insert id="createItem" parameterType="com.quang.app.JavaWeb_cdquang.entity.Item" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO items (name, description, price, image, type)
 		VALUES (#{name}, #{description}, #{price}, #{image}, #{type})
 		
@@ -57,7 +57,9 @@
 	
 	<select id="getItemById">
 		SELECT 
-			*
+			id, name, description, price, image, status, type, 
+			create_at AS createAt,
+			update_at AS updateAt
 		FROM 
 			items
 		WHERE 
@@ -126,5 +128,19 @@
 			
 			AND status = true
 		</where>
+	</select>
+	
+	<select id="getAllItem" resultType="com.quang.app.JavaWeb_cdquang.entity.Item">
+		SELECT 
+			id
+			, name
+			, description
+			, price
+			, image
+			, status
+			, type
+			, create_at AS createAt
+			, update_at AS updateAt
+		FROM items
 	</select>
 </mapper>

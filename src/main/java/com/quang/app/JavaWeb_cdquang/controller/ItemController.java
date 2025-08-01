@@ -1,5 +1,8 @@
 package com.quang.app.JavaWeb_cdquang.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -18,8 +21,10 @@ import com.quang.app.JavaWeb_cdquang.dto.ItemRequest;
 import com.quang.app.JavaWeb_cdquang.dto.PageResponse;
 import com.quang.app.JavaWeb_cdquang.dto.UpdateItemRequest;
 import com.quang.app.JavaWeb_cdquang.entity.Item;
+import com.quang.app.JavaWeb_cdquang.service.ElasticItemService;
 import com.quang.app.JavaWeb_cdquang.service.ItemService;
 
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
@@ -29,6 +34,9 @@ public class ItemController {
 	
 	@Autowired
 	ItemService itemService;
+	
+	@Autowired
+	ElasticItemService elasticItemService;
 	
 	@PostMapping("/items")
 	@Secured("ROLE_ADMIN")
@@ -70,6 +78,14 @@ public class ItemController {
 	public ResponseEntity<ApiResponse<PageResponse<Item>>> filterItemsUser(@ModelAttribute @Valid FilterItemsRequest filterItem) {
 		PageResponse<Item> pageResponse = itemService.filterItemsUser(filterItem);
 		ApiResponse<PageResponse<Item>> response = new ApiResponse<>("success","Successfully", pageResponse);
+		
+		return ResponseEntity.status(200).body(response);
+	}
+	
+	@GetMapping("/user/items/suggest")
+	public ResponseEntity<ApiResponse<List<String>>> getSuggestName(@RequestParam String name) throws ElasticsearchException, IOException {
+		List<String> listStringHit = elasticItemService.suggest(name);
+		ApiResponse<List<String>> response = new ApiResponse<>("success","Successfully", listStringHit);
 		
 		return ResponseEntity.status(200).body(response);
 	}

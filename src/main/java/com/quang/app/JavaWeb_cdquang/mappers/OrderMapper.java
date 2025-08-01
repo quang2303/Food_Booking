@@ -29,4 +29,6 @@ public interface OrderMapper {
 	public void updateStatus(@Param("id") Integer orderId, @Param("status") OrderStatus status);
 	
 	public List<Map<String, Object>> getOrderStats(String time);
+	
+	public List<Order> getAllOrder();
 }

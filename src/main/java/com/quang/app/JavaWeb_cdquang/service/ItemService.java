@@ -25,6 +25,12 @@ public class ItemService {
 	
 	@Autowired
 	ItemMapper itemMapper;
+	
+	@Autowired
+	SearchService searchService;
+	
+	@Autowired
+	ElasticItemService elasticItemService;
 
 	@Transactional
 	public void createItem(ItemRequest item) {
@@ -49,6 +55,9 @@ public class ItemService {
 		} catch (Exception e) {
 			throw new OperationFailedException("Create is failed");
 		}
+		
+		Item itemAdded = itemMapper.getItemById(itemCreate.getId());
+		elasticItemService.saveItemToElasticsearch(itemAdded);
 	}
 
 	public PageResponse<Item> filterItems(FilterItemsRequest filterItem) {
@@ -72,6 +81,8 @@ public class ItemService {
 				filterItem.getSortByPrice());
 		Integer totalItems = itemMapper.countFilteredItemsUser(filterItem.getName(), filterItem.getType());
 		Integer totalPages = (int) Math.ceil((double) totalItems / limit);
+		
+		searchService.saveSearchLog(filterItem.getName());
 
 		return new PageResponse<>(items, totalItems, totalPages);
 	}
@@ -87,6 +98,8 @@ public class ItemService {
 		}
 		try {
 			itemMapper.deleteItem(id);
+			Item itemUpdated = itemMapper.getItemById(id);
+			elasticItemService.saveItemToElasticsearch(itemUpdated);
 		} catch (Exception e) {
 			throw new OperationFailedException("Delete is failed");
 		}
@@ -137,5 +150,8 @@ public class ItemService {
 		} catch (Exception e) {
 			throw new OperationFailedException("Update is failed");
 		}
+		
+		Item itemUpdated = itemMapper.getItemById(id);
+		elasticItemService.saveItemToElasticsearch(itemUpdated);
 	}
 }

@@ -392,7 +392,7 @@ function renderItemsPerPage(data) {
 		                                            ${item.description}
 		                                        </p>
 		                                    </td>
-		                                    <td><p>${item.price} đ</p></td>
+		                                    <td><p>${formater.format(item.price)} đ</p></td>
 		                                    <td>
 		                                        <label class="switch ${item.status ? "active" : ""}">
 		                                            <input type="checkbox" />
@@ -478,6 +478,7 @@ function renderAllItems() {
 
 $("#num-per-page").change(function() {
 	size = parseInt($(this).val());
+	currentPage = 1;
 	renderAllItems();
 })
 
@@ -663,7 +664,7 @@ function loadInfoDashboard() {
 
 		success: function(data) {
 			const info = data.data;
-			$(".today-sale .total-statistics").text(info.todaySale + " đ")
+			$(".today-sale .total-statistics").text(formater.format(info.todaySale) + " đ")
 			$(".total .total-statistics").text(info.totalOrder)
 			$(".shipping .total-statistics").text(info.numShipping)
 			$(".complete .total-statistics").text(info.numCompleted)
@@ -719,7 +720,7 @@ function renderOrdersPerPage(data) {
 		                                                ${order.item.description}
 		                                            </p>
 		                                            <div class="price-quantity">
-		                                                <p class="price">${order.item.price} đ</p>
+		                                                <p class="price">${formater.format(order.item.price)} đ</p>
 		                                                <p class="quantity">
 		                                                    Quantity: ${order.item.quantity}
 		                                                </p>
@@ -730,7 +731,7 @@ function renderOrdersPerPage(data) {
 		                                <div class="price-quantity-total">
 		                                    <p class="quantity-total">${order.itemCount} items</p>
 		                                    <div class="price-status">
-		                                        <p class="price">${order.totalPrice} đ</p>
+		                                        <p class="price">${formater.format(order.totalPrice)} đ</p>
 		                                        <div class="status-order ${order.status.toLowerCase()}">
 		                                            <img
 		                                                src="../images/icon/status-${order.status.toLowerCase()}.svg"
@@ -835,7 +836,7 @@ function renderListItemDetailOrder(items) {
 		                                            ${item.description}
 		                                        </p>
 		                                        <div class="price-quantity">
-		                                            <p class="price">${item.price} đ</p>
+		                                            <p class="price">${formater.format(item.price)} đ</p>
 		                                            <p class="quantity">Quantity: ${item.quantity}</p>
 		                                        </div>
 		                                    </div>
@@ -908,9 +909,9 @@ function renderDetailOrder(order) {
 	$("#modal-detail-order .address-info .message").text(order.message);
 	console.log(order)
 
-	$("#modal-detail-order .total-price-item .price").text(order.totalPrice - order.feeShip);
-	$("#modal-detail-order .fee-shipping .price").text(order.feeShip);
-	$("#modal-detail-order .total-price-order .price").text(order.totalPrice + " đ");
+	$("#modal-detail-order .total-price-item .price").text(formater.format(order.totalPrice - order.feeShip));
+	$("#modal-detail-order .fee-shipping .price").text(formater.format(order.feeShip));
+	$("#modal-detail-order .total-price-order .price").text(formater.format(order.totalPrice) + " đ");
 
 	renderListItemDetailOrder(items);
 
@@ -953,6 +954,7 @@ $("#confirm-update").on("click", function() {
 			showToast("success", "Update status", "Update successfully");
 			$("#dialog-confirm-update").hide();
 			renderAllOrders();
+			loadInfoDashboard()
 		},
 
 		error: function(xhr) {
