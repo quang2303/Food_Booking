@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giao hàng thành công</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      background-color: #2196F3;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .content {
+      padding: 30px;
+      color: #333;
+    }
+
+    .content h2 {
+      color: #2196F3;
+    }
+
+    .delivery-info {
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+
+    .footer {
+      background-color: #f1f1f1;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      padding: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 20px;
+      background-color: #2196F3;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Đơn hàng đã được giao thành công 🚚</h1>
+    </div>
+    <div class="content">
+      <h2>Xin chào {{name}},</h2>
+      <p>Chúng tôi rất vui thông báo rằng đơn hàng của bạn đã được giao thành công đến địa chỉ sau:</p>
+
+      <div class="delivery-info">
+        <strong>ID Đơn hàng:</strong> {{order_id}}<br>
+        <strong>Người nhận:</strong> {{name}}<br>
+        <strong>Số điện thoại:</strong> {{phone}}<br>
+        <strong>Địa chỉ giao hàng:</strong> {{address}}<br>
+        <strong>Ngày giao hàng:</strong> {{updateAt}}
+      </div>
+
+      <a href="{{feedback_link}}" class="btn">Gửi đánh giá sản phẩm</a>
+    </div>
+    <div class="footer">
+      Cảm ơn bạn đã tin tưởng mua sắm tại cửa hàng chúng tôi.<br>
+      Nếu có vấn đề phát sinh, vui lòng liên hệ CSKH qua hotline hoặc email bên dưới.
+    </div>
+  </div>
+</body>
+</html>

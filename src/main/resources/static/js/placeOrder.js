@@ -237,8 +237,15 @@ $(".cancel").click(function() {
 	window.location.href = "/user/home.html";
 })
 
-function validateInfo(name, phone, message, city, ward, detailLocation) {
+function validateInfo(email, name, phone, message, city, ward, detailLocation) {
 	let valid = true;
+	
+	if(email.length === 0) {
+		valid = false;
+		$(`#email`).next().text("Please input your email");
+	} else {
+		$(`#email`).next().text("");
+	}
 
 	if (name.length === 0) {
 		valid = false;
@@ -331,12 +338,13 @@ $(".place-order").click(function() {
 	const city = $(".current-city").text().trim();
 	const ward = $(".current-ward").text().trim();
 	const detailLocation = $("#detail-location").val().trim();
+	const email = $("#email").val().trim();
 	let priceText = $(".total-bill-price").text().replace(".", "");
 	const totalPrice = parseInt(priceText.substr(0, priceText.length - 2));
 	let feeText = $(".price-fee").text().replace(".", "");
 	const feeShip = parseInt(feeText.substr(0, feeText.length - 2));
 
-	if (!validateInfo(name, phone, message, city, ward, detailLocation)) {
+	if (!validateInfo(email, name, phone, message, city, ward, detailLocation)) {
 		$("html, body").animate({
 			scrollTop: $(".title").offset().top
 		}, 1000);
@@ -360,6 +368,7 @@ $(".place-order").click(function() {
 
 	const order = {
 		name: name,
+		email: email,
 		phone: phone,
 		message: message,
 		address: address,

@@ -55,10 +55,10 @@
 		parameterType="com.quang.app.JavaWeb_cdquang.entity.Order"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO
-		orders(address, name, phone, message, total_price, status, fee_ship)
+		orders(address, name, phone, message, total_price, status, fee_ship, email)
 		VALUES
 		(#{address}, #{name}, #{phone}, #{message}, #{totalPrice}, "NEW",
-		#{feeShip})
+		#{feeShip}, #{email})
 	</insert>
 
 	<select id="getOrderById" parameterType="int" resultMap="orderInfo">
@@ -221,6 +221,22 @@
 
 	<select id="countOrderByStatus" parameterType="String" resultType="int">
 		SELECT COUNT(1) FROM orders WHERE status = #{status} AND DATE(create_at) = CURRENT_DATE
+	</select>
+	
+	<select id="getInfoOrderEmail" parameterType="int" resultType="com.quang.app.JavaWeb_cdquang.dto.InfoOrderEmail">
+		SELECT 
+			name
+			, email
+			, phone
+			, address
+			, update_at AS updateAt
+		FROM orders WHERE id = #{id}
+	</select>
+	
+	<select id="getRevenueOrder">
+		SELECT 
+			*
+		FROM orders WHERE created_at BETWEEN #{start} AND #{end}
 	</select>
 
 	<select id="sumTodaySale" resultType="long">

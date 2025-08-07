@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quang.app.JavaWeb_cdquang.document.ItemDocument;
 import com.quang.app.JavaWeb_cdquang.dto.ApiResponse;
 import com.quang.app.JavaWeb_cdquang.dto.FilterItemsRequest;
 import com.quang.app.JavaWeb_cdquang.dto.ItemRequest;
+import com.quang.app.JavaWeb_cdquang.dto.ItemResponse;
 import com.quang.app.JavaWeb_cdquang.dto.PageResponse;
 import com.quang.app.JavaWeb_cdquang.dto.UpdateItemRequest;
 import com.quang.app.JavaWeb_cdquang.entity.Item;
@@ -47,11 +49,20 @@ public class ItemController {
 		return ResponseEntity.status(201).body(response);
 	}
 	
+//	@GetMapping("/items")
+//	@Secured("ROLE_ADMIN")
+//	public ResponseEntity<ApiResponse<PageResponse<Item>>> filterItems(@ModelAttribute @Valid FilterItemsRequest filterItem) {
+//		PageResponse<Item> pageResponse = itemService.filterItems(filterItem);
+//		ApiResponse<PageResponse<Item>> response = new ApiResponse<>("success","Successfully", pageResponse);
+//		
+//		return ResponseEntity.status(200).body(response);
+//	}
+	
 	@GetMapping("/items")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<ApiResponse<PageResponse<Item>>> filterItems(@ModelAttribute @Valid FilterItemsRequest filterItem) {
-		PageResponse<Item> pageResponse = itemService.filterItems(filterItem);
-		ApiResponse<PageResponse<Item>> response = new ApiResponse<>("success","Successfully", pageResponse);
+	public ResponseEntity<ApiResponse<PageResponse<ItemDocument>>> filterItems(@ModelAttribute @Valid FilterItemsRequest filterItem) {
+		PageResponse<ItemDocument> pageResponse = elasticItemService.filterItemInElasticsearchAdmin(filterItem);
+		ApiResponse<PageResponse<ItemDocument>> response = new ApiResponse<>("success","Successfully", pageResponse);
 		
 		return ResponseEntity.status(200).body(response);
 	}
@@ -74,10 +85,18 @@ public class ItemController {
 		return ResponseEntity.status(200).body(response);
 	}
 	
+//	@GetMapping("/user/items")
+//	public ResponseEntity<ApiResponse<PageResponse<Item>>> filterItemsUser(@ModelAttribute @Valid FilterItemsRequest filterItem) {
+//		PageResponse<Item> pageResponse = itemService.filterItemsUser(filterItem);
+//		ApiResponse<PageResponse<Item>> response = new ApiResponse<>("success","Successfully", pageResponse);
+//		
+//		return ResponseEntity.status(200).body(response);
+//	}
+	
 	@GetMapping("/user/items")
-	public ResponseEntity<ApiResponse<PageResponse<Item>>> filterItemsUser(@ModelAttribute @Valid FilterItemsRequest filterItem) {
-		PageResponse<Item> pageResponse = itemService.filterItemsUser(filterItem);
-		ApiResponse<PageResponse<Item>> response = new ApiResponse<>("success","Successfully", pageResponse);
+	public ResponseEntity<ApiResponse<PageResponse<ItemResponse>>> filterItemsUser(@ModelAttribute @Valid FilterItemsRequest filterItem) {
+		PageResponse<ItemResponse> pageResponse = elasticItemService.filterItemInElasticsearchUser(filterItem);
+		ApiResponse<PageResponse<ItemResponse>> response = new ApiResponse<>("success","Successfully", pageResponse);
 		
 		return ResponseEntity.status(200).body(response);
 	}

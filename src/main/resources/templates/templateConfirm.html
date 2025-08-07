@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xác nhận đơn hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .email-container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .content {
+      padding: 30px;
+      color: #333;
+    }
+
+    .content h2 {
+      color: #4CAF50;
+    }
+
+    .order-details {
+      margin-top: 20px;
+      line-height: 1.8;
+    }
+
+    .footer {
+      background-color: #f1f1f1;
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <h1>Đặt hàng thành công! 🎉</h1>
+    </div>
+    <div class="content">
+      <h2>Xin chào, <span>{{name}}</span></h2>
+      <p>Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi. Dưới đây là thông tin đơn hàng của bạn:</p>
+
+      <div class="order-details">
+        <strong>ID Đơn hàng:</strong> {{order_id}}<br>
+        <strong>Số điện thoại:</strong> {{phone}}<br>
+        <strong>Địa chỉ nhận hàng:</strong> {{address}}<br>
+      </div>
+
+      <a href="http://localhost:8080/user/home.html" class="btn">Nhấp link để xem chi tiết</a>
+    </div>
+    <div class="footer">
+      Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ bộ phận chăm sóc khách hàng.<br>
+      📞 Hotline: 1900 xxx xxx | ✉️ Email: support@yourshop.vn
+    </div>
+  </div>
+</body>
+</html>

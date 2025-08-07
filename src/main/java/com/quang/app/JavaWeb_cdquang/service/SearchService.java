@@ -1,9 +1,12 @@
 package com.quang.app.JavaWeb_cdquang.service;
 
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,9 @@ public class SearchService {
 			return;
 		}
 		
-		SearchLogDocument searchLog = new SearchLogDocument(keyWordToSave, LocalDateTime.now().toString());
+		ZonedDateTime vietnamTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+		Instant utcTime = vietnamTime.toInstant();
+		SearchLogDocument searchLog = new SearchLogDocument(keyWordToSave, utcTime.toString());
 		
 		try {
 			elasticsearchClient.index(index -> index
@@ -56,8 +61,9 @@ public class SearchService {
 		List<String> topSearch = new ArrayList<>();
 		
 		// Get monday and now time
-		LocalDateTime now = LocalDateTime.now();
-		LocalDate today = LocalDate.now();
+		ZoneId vietnamZone = ZoneId.of("Asia/Ho_Chi_Minh");
+		LocalDateTime now = LocalDateTime.now(vietnamZone);
+		LocalDate today = LocalDate.now(vietnamZone);
 		LocalDate monday = today.with(DayOfWeek.MONDAY);
 		LocalDateTime start = LocalDateTime.of(monday, LocalTime.MIN);
 		

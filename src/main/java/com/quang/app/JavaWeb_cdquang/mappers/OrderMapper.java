@@ -1,11 +1,13 @@
 package com.quang.app.JavaWeb_cdquang.mappers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.quang.app.JavaWeb_cdquang.dto.InfoOrderEmail;
 import com.quang.app.JavaWeb_cdquang.entity.Order;
 import com.quang.app.JavaWeb_cdquang.entity.OrderStatus;
 
@@ -31,4 +33,8 @@ public interface OrderMapper {
 	public List<Map<String, Object>> getOrderStats(String time);
 	
 	public List<Order> getAllOrder();
+	
+	public InfoOrderEmail getInfoOrderEmail(Integer id);
+	
+	public List<Order> getRevenueOrder(@Param("start") LocalDateTime from, @Param("end") LocalDateTime to);
 }

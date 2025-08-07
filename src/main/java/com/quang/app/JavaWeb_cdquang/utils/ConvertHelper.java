@@ -37,6 +37,7 @@ public class ConvertHelper {
 		Order order = new Order();
 		order.setAddress(orderInfo.getAddress());
 		order.setName(orderInfo.getName());
+		order.setEmail(orderInfo.getEmail());
 		order.setPhone(orderInfo.getPhone());
 		order.setMessage(orderInfo.getMessage());
 		order.setTotalPrice(orderInfo.getTotalPrice());
@@ -65,23 +66,23 @@ public class ConvertHelper {
 			listItemOrder.add(new ItemOrderResponse(item.getName(), item.getDescription(), item.getImage(),
 					item.getPrice(), orderItems.getQuantity()));
 		}
-		
+
 		orderResponse.setItems(listItemOrder);
-		
+
 		return orderResponse;
 	}
-	
+
 	public static List<OrderResponse> orderToDto(List<Order> listOrder) {
 		List<OrderResponse> listOrderResponse = new ArrayList<>();
-		
-		for(Order order: listOrder) {
+
+		for (Order order : listOrder) {
 			OrderResponse orderResponse = new OrderResponse();
 			orderResponse.setId(order.getId());
 			orderResponse.setStatus(order.getStatus().getStatusString());
 			orderResponse.setCreateAt(FormatHelper.formatDateOrder(order.getCreateAt()));
 			orderResponse.setTotalPrice(order.getTotalPrice());
 			orderResponse.setItemCount(order.getItemCount());
-			
+
 			Item item = order.getItem();
 			ItemOrderResponse itemOrderResponse = new ItemOrderResponse();
 			itemOrderResponse.setName(item.getName());
@@ -89,15 +90,15 @@ public class ConvertHelper {
 			itemOrderResponse.setImage(item.getImage());
 			itemOrderResponse.setPrice(item.getPrice());
 			itemOrderResponse.setQuantity(item.getOrderItem().getQuantity());
-			
+
 			orderResponse.setItem(itemOrderResponse);
-			
+
 			listOrderResponse.add(orderResponse);
 		}
-		
+
 		return listOrderResponse;
 	}
-	
+
 	public static ItemDocument itemToDoc(Item item) {
 		ItemDocument itemDoc = new ItemDocument();
 		itemDoc.setId(item.getId());
@@ -109,10 +110,21 @@ public class ConvertHelper {
 		itemDoc.setType(item.getType());
 		itemDoc.setCreateAt(item.getCreateAt().toString());
 		itemDoc.setUpdateAt(item.getUpdateAt().toString());
-		
+
 		return itemDoc;
 	}
-	
+
+	public static ItemResponse itemDocToResponse(ItemDocument doc) {
+		ItemResponse response = new ItemResponse();
+		response.setId(doc.getId());
+		response.setName(doc.getName());
+		response.setDescription(doc.getDescription());
+		response.setPrice(doc.getPrice());
+		response.setImage(doc.getImage());
+		response.setType(doc.getType());
+		return response;
+	}
+
 	public static OrderDocument orderToDoc(Order order) {
 		OrderDocument orderDoc = new OrderDocument();
 		orderDoc.setId(order.getId());
@@ -124,19 +136,19 @@ public class ConvertHelper {
 		orderDoc.setFeeShip(order.getFeeShip());
 		orderDoc.setStatus(order.getStatus().getStatusString());
 		orderDoc.setCreateAt(order.getCreateAt().toString());
-		
+
 		List<OrderItemDocument> listItemOrder = new ArrayList<>();
 		List<Item> items = order.getItems();
-		
+
 		for (Item item : items) {
 			OrderItems orderItems = item.getOrderItem();
 			String orderItemId = order.getId() + "_" + item.getId();
 			listItemOrder.add(new OrderItemDocument(orderItemId, item.getName(), item.getDescription(), item.getImage(),
 					item.getPrice(), orderItems.getQuantity()));
 		}
-		
+
 		orderDoc.setItems(listItemOrder);
-		
+
 		return orderDoc;
 	}
 }

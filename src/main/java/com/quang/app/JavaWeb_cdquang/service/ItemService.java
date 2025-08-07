@@ -46,8 +46,6 @@ public class ItemService {
 			throw new OperationFailedException("Item name is exist");
 		}
 
-		FileHelper.saveImage(image, imageName);
-
 		Item itemCreate = ConvertHelper.dtoToItem(item, imageName);
 
 		try {
@@ -56,6 +54,9 @@ public class ItemService {
 			throw new OperationFailedException("Create is failed");
 		}
 		
+		FileHelper.saveImage(image, imageName);
+		
+		// Save to elastic
 		Item itemAdded = itemMapper.getItemById(itemCreate.getId());
 		elasticItemService.saveItemToElasticsearch(itemAdded);
 	}
@@ -121,37 +122,46 @@ public class ItemService {
 		if(!oldItem.getStatus()) {
 			throw new OperationFailedException("Item is deleted, can not update");
 		}
-		
-		String imageName;
 
 		if (itemMapper.checkNameItemExisted(item.getName(), id)) {
 			throw new OperationFailedException("Item name is existed");
 		}
 		
+		String imageName;
+		
 		String oldNameImage = oldItem.getImage();
+		
+		boolean hasNewImage = (image != null);
 
-		// Check image
-		if ( image == null) {
+		// Check image to set name image
+		if (!hasNewImage) {
 			//No image -> rename name
 			imageName = item.getName().replace(" ", "-") + oldNameImage.substring(oldNameImage.indexOf("."), oldNameImage.length());
-			FileHelper.renameImage(oldNameImage, imageName);
-			
 		} else {
 			// Has image -> change file 
 			imageName = item.getName().replace(" ", "-") + "." + image.getContentType().replace("image/", "");
-			FileHelper.deleteImage(oldItem.getImage());
-			FileHelper.saveImage(image, imageName);
 		}
 
 		Item itemCreate = ConvertHelper.dtoToItem(id, item, imageName);
 
 		try {
 			itemMapper.updateItem(itemCreate);
+			
+			// Check image to save or rename file
+			if (!hasNewImage) {
+				//No image -> rename name
+				FileHelper.renameImage(oldNameImage, imageName);
+			} else {
+				// Has image -> change file 
+				FileHelper.deleteImage(oldItem.getImage());
+				FileHelper.saveImage(image, imageName);
+			}
+			
+			// Update to elastic
+			Item itemUpdated = itemMapper.getItemById(id);
+			elasticItemService.saveItemToElasticsearch(itemUpdated);
 		} catch (Exception e) {
 			throw new OperationFailedException("Update is failed");
 		}
-		
-		Item itemUpdated = itemMapper.getItemById(id);
-		elasticItemService.saveItemToElasticsearch(itemUpdated);
 	}
 }

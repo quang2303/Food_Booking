@@ -13,6 +13,7 @@ public class Order {
 	private String address;
 	private String phone;
 	private String name;
+	private String email;
 	private String message;
 	private Long totalPrice;
 	private LocalDateTime createAt;

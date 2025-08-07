@@ -1,5 +1,8 @@
 package com.quang.app.JavaWeb_cdquang.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ import com.quang.app.JavaWeb_cdquang.dto.PageResponse;
 import com.quang.app.JavaWeb_cdquang.dto.UpdateOrderRequest;
 import com.quang.app.JavaWeb_cdquang.dto.FilterOrderRequest;
 import com.quang.app.JavaWeb_cdquang.dto.InfoDasboardResponse;
+import com.quang.app.JavaWeb_cdquang.dto.InfoOrderEmail;
 import com.quang.app.JavaWeb_cdquang.dto.OrderDetailResponse;
 import com.quang.app.JavaWeb_cdquang.entity.Order;
 import com.quang.app.JavaWeb_cdquang.entity.OrderStatus;
@@ -36,6 +40,9 @@ public class OrderService {
 	OrderItemsMapper orderItemsMapper;
 	
 	@Autowired
+	MailService mailService;
+	
+	@Autowired
 	ElasticOrderService elasticOrderService;
 
 	@Transactional
@@ -56,6 +63,20 @@ public class OrderService {
 		}
 		
 		elasticOrderService.saveOrderToElastic(order.getId());
+		
+		String html = "";
+		try {
+			html = Files.readString(Paths.get("src/main/resources/templates/templateConfirm.html"));
+			
+			html = html.replace("{{name}}", orderInfo.getName())
+					.replace("{{order_id}}", order.getId().toString())
+					.replace("{{phone}}", orderInfo.getPhone())
+					.replace("{{address}}", orderInfo.getAddress());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		mailService.sendOrderConfirmation(orderInfo.getEmail(), "Confirm Order", html);
 
 		return order.getId();
 	}
@@ -115,6 +136,25 @@ public class OrderService {
 			elasticOrderService.saveOrderToElastic(orderRequest.getOrderId());
 		} catch (Exception e) {
 			throw new OperationFailedException("Update status order is failed");
+		}
+		
+		if(newStatus.equals(OrderStatus.COMPLETED)) {
+			InfoOrderEmail orderInfo = orderMapper.getInfoOrderEmail(orderRequest.getOrderId());
+			
+			String html = "";
+			try {
+				html = Files.readString(Paths.get("src/main/resources/templates/order-complete.html"));
+				
+				html = html.replace("{{name}}", orderInfo.getName())
+						.replace("{{order_id}}", order.getId().toString())
+						.replace("{{phone}}", orderInfo.getPhone())
+						.replace("{{address}}", orderInfo.getAddress())
+						.replace("{{updateAt}}", orderInfo.getUpdateAt());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			mailService.sendOrderConfirmation(orderInfo.getEmail(), "Delivery successful", html);
 		}
 	}
 
